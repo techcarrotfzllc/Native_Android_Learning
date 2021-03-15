@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:id="@+id/clinicHisId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clinic HIS Id"
+        android:textStyle="bold"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:padding="2dp"
+        android:textColor="#4d4d4d"
+        android:layout_marginStart="10dp" />
+
+    <TextView
+        android:id="@+id/clinicName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Clinic Name"
+        android:textStyle="bold"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:padding="2dp"
+        android:textColor="#4d4d4d"
+        android:layout_marginStart="10dp" />
+
+    <TextView
+        android:id="@+id/specializationHisId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Specialization HIS Id"
+        android:textStyle="bold"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:padding="2dp"
+        android:textColor="#4d4d4d"
+        android:layout_marginStart="10dp" />
+
+
+    <TextView
+        android:id="@+id/specializationName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Specialization Name"
+        android:textStyle="bold"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:padding="2dp"
+        android:textColor="#4d4d4d"
+        android:layout_marginStart="10dp" />
+
+    <TextView
+        android:id="@+id/doctorHisId"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Doctor HIS Id"
+        android:textStyle="bold"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:padding="2dp"
+        android:textColor="#4d4d4d"
+        android:layout_marginStart="10dp" />
+
+    <TextView
+        android:id="@+id/doctorName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Doctor Name"
+        android:textStyle="bold"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        android:padding="2dp"
+        android:textColor="#4d4d4d"
+        android:layout_marginStart="10dp" />
+
+</LinearLayout>
