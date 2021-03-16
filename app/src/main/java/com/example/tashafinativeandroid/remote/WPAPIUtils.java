@@ -1,7 +1,5 @@
 package com.example.tashafinativeandroid.remote;
 
-import com.example.tashafinativeandroid.WpApiInterface;
-
 public class WPAPIUtils {
     public WPAPIUtils() {
     }

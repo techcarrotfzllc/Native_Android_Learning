@@ -8,11 +8,16 @@ import okhttp3.Request;
 import okhttp3.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import okhttp3.OkHttpClient;
+import okhttp3.logging.HttpLoggingInterceptor;
 
 public class RetrofitClient1 {
     public static Retrofit retrofit = null;
 
     public static Retrofit getClient(String baseUrl) {
+
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
 
         OkHttpClient.Builder httpClient = new OkHttpClient.Builder();
         httpClient.addInterceptor(new Interceptor() {
@@ -30,7 +35,8 @@ public class RetrofitClient1 {
                 return chain.proceed(request);
             }
 
-        });
+        })
+        .addInterceptor(loggingInterceptor);
 
         OkHttpClient client = httpClient.build();
 

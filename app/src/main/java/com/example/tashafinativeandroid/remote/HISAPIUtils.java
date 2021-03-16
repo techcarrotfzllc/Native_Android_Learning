@@ -1,7 +1,5 @@
 package com.example.tashafinativeandroid.remote;
 
-import com.example.tashafinativeandroid.MainInterface;
-
 public class HISAPIUtils {
     public HISAPIUtils() {
     }

@@ -1,6 +1,8 @@
 package com.example.tashafinativeandroid;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.DatePickerDialog;
@@ -19,9 +21,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tashafinativeandroid.Adapters.RecyclerAdapter;
+import com.example.tashafinativeandroid.Modals.BookingSlots;
 import com.example.tashafinativeandroid.Modals.RetrofitModal;
 import com.example.tashafinativeandroid.remote.HISAPIUtils;
+import com.example.tashafinativeandroid.remote.MainInterface;
 import com.example.tashafinativeandroid.remote.WPAPIUtils;
+import com.example.tashafinativeandroid.remote.WpApiInterface;
+import com.example.tashafinativeandroid.viewmodel.MappingViewModel;
+import com.example.tashafinativeandroid.viewmodel.SlotBookingViewModel;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -54,6 +61,8 @@ public class MainActivity extends AppCompatActivity {
     private int year, month, day;
     Button button, dateButton;
     TextView slotText;
+    private MappingViewModel viewModel;
+    private SlotBookingViewModel slotsViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,130 +137,131 @@ public class MainActivity extends AppCompatActivity {
 
     private void getData() {
 
-//        Gson gson = new GsonBuilder()
-//                .setLenient()
-//                .create();
-
         ProgressDialog dialog = new ProgressDialog(MainActivity.this);
-        dialog.setMessage("Please Wait...");
-
-        dialog.setCancelable(false);
-
-        dialog.show();
-
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl("https://demo.techcarrot.ae/tashafidev/wp-json/tashafiapidata/")
-//                .addConverterFactory(GsonConverterFactory.create(gson))
-//                .build();
-
-//        WpApiInterface wpApiInterface = retrofit.create(WpApiInterface.class);
-
-        WpApiInterface wpApiInterface = WPAPIUtils.getApiService();
-
-        Call<List<RetrofitModal>> Call = wpApiInterface.getMappingData();
-
-        Call.enqueue(new Callback<List<RetrofitModal>>() {
+//        dialog.setMessage("Please Wait...");
+//
+//        dialog.setCancelable(false);
+//
+//        dialog.show();
+        viewModel = ViewModelProviders.of(this).get(MappingViewModel.class);
+        viewModel.getMappingList().observe(this, new Observer<List<RetrofitModal>>() {
             @Override
-            public void onResponse(Call<List<RetrofitModal>> call, Response<List<RetrofitModal>> response) {
-                Log.v("checkfkdfl;dkf", response.toString());
-                if (response.isSuccessful() && response.body() != null) {
-                    List<RetrofitModal> rs = response.body();
-                    Log.v("In succes", String.valueOf(rs));
-                    parseArray(rs);
-                    dialog.dismiss();
-
-//                    JSONArray jsonArray = new JSONArray(response.body());
-//                    Log.v("fddfdffdf", String.valueOf(jsonArray));
-//                    parseArray(jsonArray);
-
-//                    try {
-//                        JSONArray jsonArray = new JSONArray(response.body());
-//                        parseArray(jsonArray);
-//                        JSONObject jsonObject = new JSONObject(response.body());
-//                        JSONArray jsonArray = jsonObject.getJSONArray("specialization_list");
-//                        parseArray(jsonArray);
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
+            public void onChanged(List<RetrofitModal> movieModels) {
+                if (movieModels != null) {
+                    parseArray(movieModels);
+//                } else {
+//                    noresult.setVisibility(View.VISIBLE);
+//                }
                 }
             }
-
-
-            @Override
-            public void onFailure(Call<List<RetrofitModal>> call, Throwable t) {
-                Log.v("In failure", "Fdffd");
-                dialog.dismiss();
-            }
         });
+
+        viewModel.makeAPICall(dialog);
+
+//        WpApiInterface wpApiInterface = WPAPIUtils.getApiService();
+//
+//        Call<List<RetrofitModal>> Call = wpApiInterface.getMappingData();
+//
+//        Call.enqueue(new Callback<List<RetrofitModal>>() {
+//            @Override
+//            public void onResponse(Call<List<RetrofitModal>> call, Response<List<RetrofitModal>> response) {
+//                Log.v("checkfkdfl;dkf", response.toString());
+//                if (response.isSuccessful() && response.body() != null) {
+//                    List<RetrofitModal> rs = response.body();
+//                    Log.v("In succes", String.valueOf(rs));
+//                    parseArray(rs);
+//                    dialog.dismiss();
+//                }
+//            }
+//
+//
+//            @Override
+//            public void onFailure(Call<List<RetrofitModal>> call, Throwable t) {
+//                Log.v("In failure", "Fdffd");
+//                dialog.dismiss();
+//            }
+//        });
     }
 
     private void getTimeSlots() {
 
-//        Gson gson = new GsonBuilder()
-//                .setLenient()
-//                .create();
-//
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl("https://eu.test.connect.boomi.com/ws/rest/healthcare/healthhub/v1/")
-//                .addConverterFactory(GsonConverterFactory.create(gson))
-////                .addConverterFactory(ScalarsConverterFactory.create())
-//                .build();
+        ProgressDialog dialog = new ProgressDialog(MainActivity.this);
 
         BookingSlots slots = new BookingSlots("5327", "2021-03-15", "11");
 
-//        MainInterface mainInterface = retrofit.create(MainInterface.class);
-
-        MainInterface mainInterface = HISAPIUtils.getApiService();
-
-        Call<BookingSlots> call = mainInterface.getSlots(slots);
-
-        ProgressDialog dialog = new ProgressDialog(MainActivity.this);
-        dialog.setMessage("Please Wait...");
-
-        dialog.setCancelable(false);
-
-        dialog.show();
-
-        call.enqueue(new Callback<BookingSlots>() {
+        slotsViewModel = ViewModelProviders.of(this).get(SlotBookingViewModel.class);
+        slotsViewModel.getSlotBooking().observe(this, new Observer<BookingSlots>() {
             @Override
-            public void onResponse(Call<BookingSlots> call, Response<BookingSlots> response) {
-                Log.v("SLOTS RES", String.valueOf(response));
-                if (!response.isSuccessful()) {
-                    dialog.dismiss();
-                    Toast.makeText(MainActivity.this, "Something went wrong. Please try again." + response, Toast.LENGTH_SHORT).show();
-                }
+            public void onChanged(BookingSlots bookingSlots) {
+                if (bookingSlots != null) {
 
-//                BookingSlots slotsResponse = response.body();
-//                Log.v("Slots Response", String.valueOf(slotsResponse));
-                try {
-                    JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
-                    JSONArray jsonArray = jsonObject.getJSONArray("AppointmentSlote");
-                    Log.v("Check Response", String.valueOf(jsonArray));
-                    for (int i = 0; i < jsonArray.length() ; i ++) {
-                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                        String content = "" + "\n";
-                        content += jsonObject1.getString("TimeSlot") + "\n";
-                        Log.v("fdf content", content);
-                        slotText.append(content);
-                    }
-                } catch (JSONException jsonException) {
-                    jsonException.printStackTrace();
-                }
-                dialog.dismiss();
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                    dialog.dismiss();
+//                } else {
+//                    noresult.setVisibility(View.VISIBLE);
 //                }
-
-            }
-
-            @Override
-            public void onFailure(Call<BookingSlots> call, Throwable t) {
-                Log.v("Slots Error", t.toString());
-                dialog.dismiss();
+                    try {
+                        JSONObject jsonObject = new JSONObject(new Gson().toJson(bookingSlots));
+                        JSONArray jsonArray = jsonObject.getJSONArray("AppointmentSlote");
+                        Log.v("Check Response", String.valueOf(jsonArray));
+                        for (int i = 0; i < jsonArray.length() ; i ++) {
+                            JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                            String content = "" + "\n";
+                            content += jsonObject1.getString("TimeSlot") + "\n";
+                            Log.v("fdf content", content);
+                            slotText.append(content);
+                        }
+                    } catch (JSONException jsonException) {
+                        jsonException.printStackTrace();
+                    }
+                }
             }
         });
 
+        slotsViewModel.makeAPICall(dialog, slots);
+
+//        MainInterface mainInterface = HISAPIUtils.getApiService();
+//
+//        Call<BookingSlots> call = mainInterface.getSlots(slots);
+//
+//        ProgressDialog dialog = new ProgressDialog(MainActivity.this);
+//        dialog.setMessage("Please Wait...");
+//
+//        dialog.setCancelable(false);
+//
+//        dialog.show();
+//
+//        call.enqueue(new Callback<BookingSlots>() {
+//            @Override
+//            public void onResponse(Call<BookingSlots> call, Response<BookingSlots> response) {
+//                Log.v("SLOTS RES", String.valueOf(response));
+//                if (!response.isSuccessful()) {
+//                    dialog.dismiss();
+//                    Toast.makeText(MainActivity.this, "Something went wrong. Please try again." + response, Toast.LENGTH_SHORT).show();
+//                }
+//
+//                try {
+//                    JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
+//                    JSONArray jsonArray = jsonObject.getJSONArray("AppointmentSlote");
+//                    Log.v("Check Response", String.valueOf(jsonArray));
+//                    for (int i = 0; i < jsonArray.length() ; i ++) {
+//                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+//                        String content = "" + "\n";
+//                        content += jsonObject1.getString("TimeSlot") + "\n";
+//                        Log.v("fdf content", content);
+//                        slotText.append(content);
+//                    }
+//                } catch (JSONException jsonException) {
+//                    jsonException.printStackTrace();
+//                }
+//                dialog.dismiss();
+//
+//            }
+//
+//            @Override
+//            public void onFailure(Call<BookingSlots> call, Throwable t) {
+//                Log.v("Slots Error", t.toString());
+//                dialog.dismiss();
+//            }
+//        });
 
     }
 
@@ -265,24 +275,6 @@ public class MainActivity extends AppCompatActivity {
             specialitiesNames.add(r.getSpecializationName());
             doctorNames.add(r.getDoctorName());
         }
-
-//        for (int i = 0; i < jsonArray.length(); i++) {
-//
-//            try {
-//                JSONObject jsonObject = jsonArray.getJSONObject(i);
-//                Log.v("JSON Object ..........", jsonObject.toString());
-//
-//                String dropDownClinicNames = jsonObject.getString("clinic_name");
-//                String dropDownSpecialitiesNames = jsonObject.getString("specialization_name");
-//                String dropDownDoctorNames = jsonObject.getString("doctor_name");
-//                clinicNames.add(dropDownClinicNames);
-//                specialitiesNames.add(dropDownSpecialitiesNames);
-//                doctorNames.add(dropDownDoctorNames);
-//
-//
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
 
         Set<String> set = new HashSet<>(clinicNames);
         clinicNames.clear();
@@ -303,7 +295,9 @@ public class MainActivity extends AppCompatActivity {
         spinnerOne.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-//                    Toast.makeText(MainActivity.this, "" + dataArrayList.get(i), Toast.LENGTH_SHORT).show();
+                if(i > 0) {
+                    Toast.makeText(MainActivity.this, "" + clinicNames.get(i), Toast.LENGTH_SHORT).show();
+                }
             }
 
             @Override
@@ -312,11 +306,34 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-//        Log.v("Spinner Pos", String.valueOf(spinnerOne.getSelectedItemPosition()));
+        spinnerTwo.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(i > 0) {
+                    Toast.makeText(MainActivity.this, "" + specialitiesNames.get(i), Toast.LENGTH_SHORT).show();
 
-//        if(spinnerOne.getSelectedItemPosition() != 0 && spinnerTwo.getSelectedItemPosition() != 0 && spinnerThree.getSelectedItemPosition() != 0){
-//            dateButton.setVisibility(View.VISIBLE);
-//        }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        spinnerThree.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(i > 0) {
+                    Toast.makeText(MainActivity.this, "" + doctorNames.get(i), Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
 
     }
 }

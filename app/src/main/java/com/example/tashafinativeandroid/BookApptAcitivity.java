@@ -7,21 +7,22 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.tashafinativeandroid.Modals.BookingAppointment;
 import com.example.tashafinativeandroid.remote.HISAPIUtils;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.example.tashafinativeandroid.remote.MainInterface;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class BookApptAcitivity extends AppCompatActivity {
 
     Button button;
+    EditText name, email, phonenumber;
+    String getName, getEmail, getPhoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,11 +30,23 @@ public class BookApptAcitivity extends AppCompatActivity {
         setContentView(R.layout.activity_book_appt_acitivity);
 
         button = findViewById(R.id.confirm);
+        name = findViewById(R.id.edit_text_name);
+        email = findViewById(R.id.edit_text_email);
+        phonenumber = findViewById(R.id.edit_text_phone_number);
+
+        getName = name.getText().toString();
+        getEmail = email.getText().toString();
+        getPhoneNumber = phonenumber.getText().toString();
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setBookAppointment();
+                if(!getName.isEmpty() && !getEmail.isEmpty() && !getPhoneNumber.isEmpty()){
+                    setBookAppointment();
+                }
+                else{
+                    Toast.makeText(BookApptAcitivity.this, "Please check all the required fields.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -41,18 +54,7 @@ public class BookApptAcitivity extends AppCompatActivity {
 
     private void setBookAppointment() {
 
-//        Gson gson = new GsonBuilder()
-//                .setLenient()
-//                .create();
-//
-//        Retrofit retrofit = new Retrofit.Builder()
-//                .baseUrl("https://eu.test.connect.boomi.com/ws/rest/healthcare/healthhub/v1/")
-//                .addConverterFactory(GsonConverterFactory.create(gson))
-//                .build();
-
         BookingAppointment bookingAppointment = new BookingAppointment(30, "App", "2021-02-04", "11", 1, "REGULAR", "08:30", "4750", "PAA", "1", "Shabeer.mohamed-external@alfuttaim.com", "Shabeer Mohamed TEST", "0544632511", "200002840", "12235");
-
-//        MainInterface mainInterface = retrofit.create(MainInterface.class);
 
         MainInterface mainInterface = HISAPIUtils.getApiService();
 
@@ -69,28 +71,7 @@ public class BookApptAcitivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<BookingAppointment> call, Response<BookingAppointment> response) {
 
-//                if (!response.isSuccessful()) {
-//                    dialog.dismiss();
-//                    Toast.makeText(getApplicationContext(), "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
-//                }
-//
-//                try {
-//                    JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
-//                    JSONArray jsonArray = jsonObject.getJSONArray("AppointmentSlote");
-//                    Log.v("Check Response", String.valueOf(jsonArray));
-//                    dialog.dismiss();
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                    dialog.dismiss();
-//                }
-
                 if (response.isSuccessful() && response.body() != null) {
-//                    try {
-//                        JSONObject jsonObject = new JSONObject(new Gson().toJson(response.body()));
-//                        Log.v("Book Appointmet", String.valueOf(jsonObject));
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
                     dialog.dismiss();
                     Toast.makeText(BookApptAcitivity.this, "Your Appointment is booked successfully with Appointmet Id : " + response.body().getAppointmentId() + " and appointment status" + response.body().getStatusMessage(), Toast.LENGTH_SHORT).show();
                 } else {

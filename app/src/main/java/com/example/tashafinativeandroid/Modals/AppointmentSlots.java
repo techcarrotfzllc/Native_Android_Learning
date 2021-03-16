@@ -1,4 +1,4 @@
-package com.example.tashafinativeandroid;
+package com.example.tashafinativeandroid.Modals;
 
 import com.google.gson.annotations.SerializedName;
 
