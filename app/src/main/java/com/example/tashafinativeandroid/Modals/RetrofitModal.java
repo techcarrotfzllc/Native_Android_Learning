@@ -3,7 +3,9 @@ package com.example.tashafinativeandroid.Modals;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class RetrofitModal {
+import java.io.Serializable;
+
+public class RetrofitModal implements Serializable {
     @SerializedName("clinic_his_id")
     @Expose
     String clinicHisId;
@@ -86,4 +88,5 @@ public class RetrofitModal {
     public void setDoctorName(String doctorName) {
         this.doctorName = doctorName;
     }
+
 }

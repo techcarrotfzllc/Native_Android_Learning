@@ -24,26 +24,50 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <Spinner
-            android:id="@+id/static_spinner"
+        <Button
+            android:id="@+id/facilityButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp" />
+            android:text="Select Facility"
+            android:layout_margin="10dp"
+            />
 
-        <Spinner
-            android:id="@+id/static_spinner1"
+        <Button
+            android:id="@+id/specialityButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp" />
+            android:text="Select Speciality"
+            android:layout_margin="10dp"
+            />
 
-        <Spinner
-            android:id="@+id/static_spinner2"
+        <Button
+            android:id="@+id/doctorButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:layout_marginBottom="20dp" />
+            android:text="Select Doctor"
+            android:layout_margin="10dp"
+            />
+
+<!--        <Spinner-->
+<!--            android:id="@+id/static_spinner"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:layout_marginBottom="20dp" />-->
+
+<!--        <Spinner-->
+<!--            android:id="@+id/static_spinner1"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:layout_marginBottom="20dp" />-->
+
+<!--        <Spinner-->
+<!--            android:id="@+id/static_spinner2"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            android:layout_marginBottom="20dp" />-->
 
         <Button
             android:id="@+id/date_button"
